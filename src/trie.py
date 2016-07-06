@@ -5,6 +5,8 @@ class TrieIndex(object):
         pass
 
     def add(self, key):
+        if not key: return
+
         p = self.root
         for i, u_char in enumerate(key):
             if u_char not in p:
@@ -35,6 +37,9 @@ class TrieIndex(object):
         string = string[begin:]
         p = self.root
         for i, u_char in enumerate(string):
+            if u_char not in p:
+                break
+
             p = p[u_char]
             if "__val" in p and p["__val"] == 1:
                 yield i + 1
