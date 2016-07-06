@@ -95,4 +95,4 @@ ENV/
 *.out
 *.err
 tmp*
-
+.idea
