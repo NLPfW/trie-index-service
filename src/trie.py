@@ -4,10 +4,9 @@ class TrieIndex(object):
         self.root = {}
         pass
 
-    def add(self, key, encoding='utf-8'):
-        ukey = key.decode(encoding)
+    def add(self, key):
         p = self.root
-        for i, u_char in enumerate(ukey):
+        for i, u_char in enumerate(key):
             if u_char not in p:
                 p[u_char] = {}
 
@@ -15,10 +14,9 @@ class TrieIndex(object):
 
         p["__val"] = 1
 
-    def get(self, key, encoding='utf-8'):
-        ukey = key.decode(encoding)
+    def get(self, key):
         p = self.root
-        for i, u_char in enumerate(ukey):
+        for i, u_char in enumerate(key):
             if u_char not in p:
                 return False
             p = p[u_char]
@@ -28,13 +26,13 @@ class TrieIndex(object):
     """
     matcher: find the common prefix of a given string and the trie
 
-    @string the given string in bytes
+    @string the given string in unicode
     @begin the start index, ignore the unicode chars before it
 
     @return generator each time gives the index which it meets
     """
     def matcher(self, string, begin=0):
-        string = string.decode('utf-8')[begin:]
+        string = string[begin:]
         p = self.root
         for i, u_char in enumerate(string):
             p = p[u_char]
