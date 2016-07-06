@@ -20,7 +20,7 @@ class MatchHandler(tornado.web.RequestHandler):
         q = self.get_argument('q', default=None)
         offset = self.get_argument('offset', default=0)
 
-        if d is None or q is None:
+        if not d or not q:
             self.write({"errno": 1, "errmsg": "parameter is missing"})
             return
 
@@ -30,16 +30,16 @@ class MatchHandler(tornado.web.RequestHandler):
 
         d = self.application.dicts[d]
         matches = [i for i in encoded_matcher(d, q, offset, 'utf-8')]
-        self.write({"errno":0, "errmsg":"ok", data=matches})
+        self.write({"errno":0, "errmsg":"ok", "data":matches})
 
 class TISApp(tornado.web.Application):
-    def init_dict(self, tag):
+    def init_dict(self):
         self.dicts = {}
         for tag in conf.dict_conf:
             dict_file = dict_locate(tag)
             self.dicts[tag] = TrieIndex()
             for line in open(dict_file):
-                line = line.rstrip()
+                line = line.decode('utf-8').rstrip()
                 self.dicts[tag].add(line)
 
 def make_app():
