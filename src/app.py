@@ -28,6 +28,14 @@ class MatchHandler(tornado.web.RequestHandler):
             self.write({"errno": 2, "errmsg": "specified dict does not exist"})
             return
 
+        # convert to unicode offset
+        try:
+            u_prefix = (q.encode('utf-8')[0:int(offset)]).decode('utf-8')
+            offset = len(u_prefix)
+        except:
+            self.write({"errno": 3, "errmsg": "utf-8 offset is not valid"})
+            return
+
         d = self.application.dicts[d]
         matches = [i for i in encoded_matcher(d, q, offset, 'utf-8')]
         self.write({"errno":0, "errmsg":"ok", "data":matches})
