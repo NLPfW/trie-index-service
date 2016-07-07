@@ -10,12 +10,36 @@ class MainHandler(tornado.web.RequestHandler):
         self.write("Hello, world")
 
 def encoded_matcher(d, q, offset, encoding='utf-8'):
+    """Convert the returned index from unicode to utf-8
+
+    Args:
+        d (unicode): dict trie index
+        q (unicode): question string in unicode
+        offset (int): start to find prefix from the position
+        encoding (str): encoding of the original question string byte stream
+
+    Yields:
+        int: the ending index of the matched prefix substring in utf-8
+    """
     for i in d.matcher(q, offset):
         length = len(q[0:i].encode(encoding))
         yield length
 
 class MatchHandler(tornado.web.RequestHandler):
+    """Handle request to the /match route, only GET request is processed."""
     def get(self):
+        """Process the GET request.
+
+        GET Args (all are converted to unicode):
+            d (str): dict name in utf-8
+            q (str): question string in utf-8 which must be url encoded
+            offset (int): the starting pos to search
+
+        Return (dict in json):
+            errno (int): 0 if success, otherwise other error numbers
+            errmsg (str): "ok" if success, otherwise other error messages
+            data (list): indices of the ending positions of all possible prefix
+        """
         d = self.get_argument('d', default=None)
         q = self.get_argument('q', default=None)
         offset = self.get_argument('offset', default=0)
