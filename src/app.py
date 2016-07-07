@@ -11,7 +11,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 def encoded_matcher(d, q, offset, encoding='utf-8'):
     for i in d.matcher(q, offset):
-        length = len(q[offset:i].encode(encoding))
+        length = len(q[0:i].encode(encoding))
         yield length
 
 class MatchHandler(tornado.web.RequestHandler):
