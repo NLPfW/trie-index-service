@@ -3,7 +3,7 @@ dict_path = "dicts"
 dict_conf = dict(
         poi = "poi.dict",
         location_func = "location.func.dict",
-        poi_class = "class.dict",
+        category = "category.dict",
         nearby = "nearby.dict",
         )
 
